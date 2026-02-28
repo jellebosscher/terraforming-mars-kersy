@@ -19,19 +19,18 @@ describe('AsteroidMiningConsortium', () => {
     game.generation = 4;
   });
 
-  it('Cannot play if no titanium production', () => {
-    expect(card.canPlay(player)).is.not.true;
-  });
-
   it('Cannot play before generation 4', () => {
-    player.production.add(Resource.TITANIUM, 1);
     game.generation = 3;
     expect(card.canPlay(player)).is.false;
     game.generation = 4;
     expect(card.canPlay(player)).is.true;
   });
 
-  it('Can play if player has titanium production', () => {
+  it('Can play without titanium production', () => {
+    expect(card.canPlay(player)).is.true;
+  });
+
+  it('Shows selfTarget warning when only player has titanium production', () => {
     player.production.add(Resource.TITANIUM, 1);
 
     expect(card.canPlay(player)).is.true;
