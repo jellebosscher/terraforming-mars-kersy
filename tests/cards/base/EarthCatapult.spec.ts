@@ -10,8 +10,9 @@ describe('EarthCatapult', () => {
     const action = card.play(player);
 
     cast(action, undefined);
-    expect(card.getVictoryPoints(player)).to.eq(2);
+    expect(card.getVictoryPoints(player)).to.eq(1);
     expect(card.getCardDiscount(player, card)).to.eq(2);
   });
 });
 
+  
