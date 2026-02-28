@@ -15,11 +15,11 @@ describe('CheungShingMARS', () => {
     [/* game */, player] = testGame(1);
   });
 
-  it('Gets card discount', () => {
+  it('Does not give a card discount for building tags', () => {
     const ants = new Ants();
     const buildingIndustries = new BuildingIndustries();
     expect(card.getCardDiscount(player, ants)).to.eq(0);
-    expect(card.getCardDiscount(player, buildingIndustries)).to.eq(2);
+    expect(card.getCardDiscount(player, buildingIndustries)).to.eq(0);
   });
 
   it('Should play', () => {

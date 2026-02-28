@@ -18,7 +18,6 @@ export class CheungShingMARS extends CorporationCard implements ICorporationCard
         production: {megacredits: 3},
       },
 
-      cardDiscount: {tag: Tag.BUILDING, amount: 2},
       metadata: {
         cardNumber: 'R16',
         description: 'You start with 3 M€ production and 44 M€.',
