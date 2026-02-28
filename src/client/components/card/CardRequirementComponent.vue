@@ -60,13 +60,14 @@ export default defineComponent({
     },
     amount(): string | number {
       switch (this.type) {
+      case RequirementType.GENERATION:
+        return 'Gen. ' + (this.requirement.generation ?? 0);
       case RequirementType.TEMPERATURE:
       case RequirementType.OXYGEN:
       case RequirementType.VENUS:
       case RequirementType.HABITAT_RATE:
       case RequirementType.MINING_RATE:
       case RequirementType.LOGISTIC_RATE:
-      case RequirementType.GENERATION:
         return this.count;
       }
       if (this.requirement.max) {
@@ -88,7 +89,7 @@ export default defineComponent({
       case RequirementType.TEMPERATURE:
         return '°C';
       case RequirementType.GENERATION:
-        return ' Gen.';
+        return '';
       }
       return '';
     },
