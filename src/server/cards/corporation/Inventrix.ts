@@ -3,9 +3,9 @@ import {Tag} from '../../../common/cards/Tag';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
 import {ICorporationCard} from './ICorporationCard';
-import { IPlayer } from '@/server/IPlayer';
+import {IPlayer} from '../../IPlayer';
 import { IProjectCard } from '../IProjectCard';
-import { AltSecondaryTag } from '@/common/cards/render/AltSecondaryTag';
+import {AltSecondaryTag} from '../../../common/cards/render/AltSecondaryTag';
 
 export class Inventrix extends CorporationCard implements ICorporationCard {
   constructor() {
