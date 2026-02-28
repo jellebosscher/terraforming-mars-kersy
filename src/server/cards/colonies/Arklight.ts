@@ -23,8 +23,8 @@ export class Arklight extends CorporationCard implements ICorporationCard {
         renderData: CardRenderer.builder((b) => {
           b.megacredits(50).nbsp.production((pb) => pb.megacredits(2));
           b.corpBox('effect', (ce) => {
-            ce.effect('When you play an animal or plant tag, including this, add 1 animal to this card and increase your M€ production 1 step.', (eb) => {
-              eb.tag(Tag.ANIMAL).slash().tag(Tag.PLANT).startEffect.resource(CardResource.ANIMAL).production((pb) => pb.megacredits(1));
+            ce.effect('When you play an animal or plant tag, including this, add 1 animal to this card and gain one M€.', (eb) => {
+              eb.tag(Tag.ANIMAL).slash().tag(Tag.PLANT).startEffect.resource(CardResource.ANIMAL).megacredits(1);
             });
             ce.vSpace(); // to offset the description to the top a bit so it can be readable
           });
@@ -36,14 +36,14 @@ export class Arklight extends CorporationCard implements ICorporationCard {
   public onNonCardTagAdded(player: IPlayer, tag: Tag): void {
     if (tag === Tag.PLANT || tag === Tag.ANIMAL) {
       player.addResourceTo(this, {qty: 1, log: true});
-      player.production.add(Resource.MEGACREDITS, 1, {log: true});
+      player.stock.add(Resource.MEGACREDITS, 1, {log: true, from: {card: this}});
     }
   }
   public onCardPlayedForCorps(player: IPlayer, card: ICard): void {
     const qty = card.tags.filter((cardTag) => cardTag === Tag.ANIMAL || cardTag === Tag.PLANT).length;
     if (qty > 0) {
       player.addResourceTo(this, {qty: qty, log: true});
-      player.production.add(Resource.MEGACREDITS, qty, {log: true});
+      player.stock.add(Resource.MEGACREDITS, qty, {log: true, from: {card: this}});
     }
   }
 }

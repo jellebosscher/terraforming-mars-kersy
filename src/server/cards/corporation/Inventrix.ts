@@ -3,6 +3,9 @@ import {Tag} from '../../../common/cards/Tag';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
 import {ICorporationCard} from './ICorporationCard';
+import { IPlayer } from '@/server/IPlayer';
+import { IProjectCard } from '../IProjectCard';
+import { AltSecondaryTag } from '@/common/cards/render/AltSecondaryTag';
 
 export class Inventrix extends CorporationCard implements ICorporationCard {
   constructor() {
@@ -27,10 +30,16 @@ export class Inventrix extends CorporationCard implements ICorporationCard {
             ce.effect('Your temperature, oxygen, ocean, and Venus requirements are +3 or -3 steps, your choice in each case.', (eb) => {
               eb.plate('Global requirements').startEffect.text('+/- 3');
             });
+            ce.effect('Cards with req. cost 1 M€ less.', (eb) => {
+              eb.cards(1, {secondaryTag: AltSecondaryTag.REQ}).startEffect.megacredits(-1);
+            });
           });
         }),
       },
     });
   }
-}
 
+  public override getCardDiscount(_player: IPlayer, card: IProjectCard) {
+    return card.requirements.length > 0 ? 1 : 0;
+  }
+}
