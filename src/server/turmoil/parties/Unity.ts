@@ -32,7 +32,7 @@ class UnityBonus01 extends Bonus {
   }
 
   grantForPlayer(player: IPlayer) {
-    player.stock.add(Resource.MEGACREDITS, this.getScore(player));
+    player.stock.add(Resource.MEGACREDITS, this.getScore(player), {log: true});
   }
 }
 
@@ -45,7 +45,7 @@ class UnityBonus02 extends Bonus {
   }
 
   grantForPlayer(player: IPlayer) {
-    player.stock.add(Resource.MEGACREDITS, this.getScore(player));
+    player.stock.add(Resource.MEGACREDITS, this.getScore(player), {log: true});
   }
 }
 

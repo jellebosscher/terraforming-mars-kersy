@@ -78,7 +78,7 @@ class RedsBonus02 implements IBonus {
     const scores = players.map((player) => this.getScore(player));
 
     players.forEach((player, idx) => {
-      if (scores[idx] < 0) player.decreaseTerraformRating();
+      if (scores[idx] < 0) player.decreaseTerraformRating(1, {log: true});
     });
   }
 }

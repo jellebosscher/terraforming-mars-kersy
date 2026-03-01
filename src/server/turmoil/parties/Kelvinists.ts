@@ -25,7 +25,7 @@ class KelvinistsBonus01 extends Bonus {
   }
 
   grantForPlayer(player: IPlayer): void {
-    player.stock.add(Resource.MEGACREDITS, this.getScore(player));
+    player.stock.add(Resource.MEGACREDITS, this.getScore(player), {log: true});
   }
 }
 
@@ -38,7 +38,7 @@ class KelvinistsBonus02 extends Bonus {
   }
 
   grantForPlayer(player: IPlayer): void {
-    player.stock.add(Resource.HEAT, this.getScore(player));
+    player.stock.add(Resource.HEAT, this.getScore(player), {log: true});
   }
 }
 
