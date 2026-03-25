@@ -72,6 +72,7 @@
                           <th><div class="mc-icon"></div></th>
                           <th v-if="game.gameOptions.showTimers" class="clock-icon">&#x1F551;</th>
                           <th><div class="table-red-arrow tooltip tooltip-top" :data-tooltip="$t('Actions taken this game')"></div></th>
+                          <th v-if="game.gameOptions.showTimers"><div class="m-and-a tooltip tooltip-top" :data-tooltip="$t('Actions per minute')">APM</div></th>
                       </tr>
                   </thead>
                   <tbody>
@@ -99,6 +100,7 @@
                           </td>
                           <td v-if="game.gameOptions.showTimers"><div class="game-end-timer">{{ getTimer(p) }}</div></td>
                           <td><div class="game-end-timer">{{ p.actionsTakenThisGame }}</div></td>
+                          <td v-if="game.gameOptions.showTimers"><div class="game-end-timer">{{ getAPM(p) }}</div></td>
                       </tr>
                   </tbody>
               </table>
@@ -383,6 +385,11 @@ export default defineComponent({
     },
     getTimer(p: PublicPlayerModel): string {
       return Timer.toString(p.timer);
+    },
+    getAPM(p: PublicPlayerModel): string {
+      const elapsedMinutes = p.timer.sumElapsed / (1000 * 60);
+      if (elapsedMinutes === 0) return 'N/A';
+      return (p.actionsTakenThisGame / elapsedMinutes).toFixed(1);
     },
     getCorporationName(p: PublicPlayerModel): string[] {
       const cards = p.tableau;

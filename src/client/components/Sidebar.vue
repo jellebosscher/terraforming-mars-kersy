@@ -18,6 +18,10 @@
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + player_color"></div>
   </div>
 
+  <div v-if="gameOptions.showTimers && timer" class="sidebar_item sidebar_item--timer" :title="$t('Your timer')">
+    <player-timer :timer="timer" :live="true"></player-timer>
+  </div>
+
   <a href="#board" :title="$t('Jump to board')">
       <div class="sidebar_item sidebar_item_shortcut">
           <i class="sidebar_icon sidebar_icon--board"></i>
@@ -84,6 +88,8 @@ import {GlobalParameter} from '@/common/GlobalParameter';
 import {MoonModel} from '@/common/models/MoonModel';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
+import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
+import {TimerModel} from '@/common/models/TimerModel';
 
 export default defineComponent({
   name: 'sidebar',
@@ -145,6 +151,9 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    timer: {
+      type: Object as () => TimerModel | undefined,
+    },
   },
   components: {
     'game-setup-detail': GameSetupDetail,
@@ -152,6 +161,7 @@ export default defineComponent({
     MoonGlobalParameterValue,
     PreferencesIcon,
     LanguageIcon,
+    'player-timer': PlayerTimer,
   },
   data() {
     return {

@@ -24,7 +24,8 @@
       :playerNumber = "playerView.players.length"
       :lastSoloGeneration = "game.lastSoloGeneration"
       :deckSize = "game.deckSize"
-      :discardPileSize = "game.discardPileSize">
+      :discardPileSize = "game.discardPileSize"
+      :timer = "thisPlayer.timer">
     </sidebar>
 
     <div v-if="thisPlayer.tableau.length > 0">
