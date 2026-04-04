@@ -61,11 +61,12 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     }
 
     if (game.gameOptions.preludeExtension) {
+      const pickedPreludes = game.gameOptions.pickedPreludes;
       this.push('prelude',
-        new SelectCard(titles.SELECT_PRELUDE_TITLE, undefined, player.dealtPreludeCards, {min: 2, max: 2})
+        new SelectCard(titles.SELECT_PRELUDE_TITLE, undefined, player.dealtPreludeCards, {min: pickedPreludes, max: pickedPreludes})
           .andThen((preludeCards) => {
-            if (preludeCards.length !== 2) {
-              throw new InputError('Only select 2 preludes');
+            if (preludeCards.length !== pickedPreludes) {
+              throw new InputError(`Only select ${pickedPreludes} preludes`);
             }
             player.preludeCardsInHand.push(...preludeCards);
             return undefined;

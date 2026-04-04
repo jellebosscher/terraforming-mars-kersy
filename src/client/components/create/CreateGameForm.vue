@@ -201,6 +201,11 @@
                               <input type="number" class="create-game-corporations-count" value="4" min="4" :max="8" v-model="startingPreludes" id="startingPreludeNum-checkbox">
                                   <span v-i18n>Starting Preludes</span>
                               </label>
+                              <label for="pickedPreludesNum-checkbox">
+                              <div class="create-game-expansion-icon expansion-icon-prelude"></div>
+                              <input type="number" class="create-game-corporations-count" value="2" min="1" :max="startingPreludes" v-model="pickedPreludes" id="pickedPreludesNum-checkbox">
+                                  <span v-i18n>Picked Preludes</span>
+                              </label>
                             </template>
 
                             <template v-if="expansions.ceo">
@@ -953,6 +958,7 @@ export default defineComponent({
       const customCeos = this.customCeos;
       const startingCeos = this.startingCeos;
       const startingPreludes = this.startingPreludes;
+      const pickedPreludes = this.pickedPreludes;
       let clonedGamedId: undefined | GameId = undefined;
 
       // Check custom colony count
@@ -1167,6 +1173,7 @@ export default defineComponent({
         customCeos,
         startingCeos,
         startingPreludes,
+        pickedPreludes,
       };
       return JSON.stringify(dataToSend, undefined, 4);
     },
