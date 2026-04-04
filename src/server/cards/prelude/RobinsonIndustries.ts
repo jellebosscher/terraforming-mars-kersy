@@ -25,10 +25,10 @@ export class RobinsonIndustries extends CorporationCard implements ICorporationC
 
       metadata: {
         cardNumber: 'R27',
-        description: 'You start with 40 M€.',
+        description: 'You start with 2 M€ production and 40 M€.',
         renderData: CardRenderer.builder((b) => {
-          b.br.br.br;
-          b.megacredits(40);
+          b.br.br;
+          b.production((pb) => pb.megacredits(2)).nbsp.megacredits(40);
           b.corpBox('action', (ce) => {
             ce.action('Spend 4 M€ to increase (one of) your LOWEST production 1 step.', (eb) => {
               eb.megacredits(4).startAction.production((pb) => pb.wild(1).asterix());
