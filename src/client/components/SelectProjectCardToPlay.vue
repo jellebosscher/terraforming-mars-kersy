@@ -3,55 +3,112 @@
 
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
 
-  <label v-for="availableCard in cards" class="payments_cards" :key="availableCard.name">
-    <input class="hidden" type="radio" v-model="cardName" v-on:change="cardChanged()" :value="availableCard.name" />
-    <Card class="cardbox" :card="availableCard" />
-  </label>
+  <!-- Instant play mode: click card to play (or expand payment panel if alternatives exist) -->
+  <template v-if="instantPlay">
+    <div v-for="availableCard in cards" class="payments_cards" :key="availableCard.name" style="cursor:pointer">
+      <Card class="cardbox" :card="availableCard" @click="selectCard(availableCard)" />
 
-  <template v-if="card.additionalProjectCosts">
-    <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
-    >
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
-      Playing ${0} will cost ${1} M€ more because ${2} are in power
+      <template v-if="cardName === availableCard.name && hasAlternativePayment">
+        <template v-if="card.additionalProjectCosts">
+          <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
+            v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
+          >
+            Playing ${0} consumes ${1} ${2} from ${3}
+          </div>
+          <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
+            v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
+            Playing ${0} consumes ${1} ${2} from ${3}
+          </div>
+          <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
+            Playing ${0} will cost ${1} M€ more because ${2} are in power
+          </div>
+        </template>
+        <warnings-component :warnings="card.warnings"></warnings-component>
+
+        <section v-trim-whitespace>
+          <h3 class="payments_title" v-i18n>How to pay?</h3>
+
+          <template v-for="unit of SPENDABLE_RESOURCES" :key="unit">
+            <div>
+              <payment-unit-component
+                v-model.number="payment[unit]"
+                v-if="canUse(unit) === true"
+                :unit="unit"
+                :description="descriptions[unit]"
+                @plus="addValue(unit)"
+                @minus="reduceValue(unit)"
+                @max="setMaxValue(unit)">
+              </payment-unit-component>
+              <div v-if="showReserveWarning(unit)" class="card-warning" v-i18n="$t(unit)">
+              (Some ${0} are unavailable here in reserve for the project card.)
+              </div>
+            </div>
+          </template>
+
+          <div v-if="hasWarning()" class="tm-warning">
+            <label class="label label-error">{{ $t(warning) }}</label>
+          </div>
+
+          <div v-if="showsave === true" class="payments_save">
+            <AppButton size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" data-test="save"/>
+          </div>
+        </section>
+      </template>
     </div>
   </template>
-  <warnings-component :warnings="card.warnings"></warnings-component>
 
-  <section v-trim-whitespace>
-    <h3 class="payments_title" v-i18n>How to pay?</h3>
+  <!-- Classic mode: radio button selection + global payment panel -->
+  <template v-else>
+    <label v-for="availableCard in cards" class="payments_cards" :key="availableCard.name">
+      <input class="hidden" type="radio" v-model="cardName" v-on:change="cardChanged()" :value="availableCard.name" />
+      <Card class="cardbox" :card="availableCard" />
+    </label>
 
-    <template v-for="unit of SPENDABLE_RESOURCES" :key="unit">
-      <div>
-        <payment-unit-component
-          v-model.number="payment[unit]"
-          v-if="canUse(unit) === true"
-          :unit="unit"
-          :description="descriptions[unit]"
-          @plus="addValue(unit)"
-          @minus="reduceValue(unit)"
-          @max="setMaxValue(unit)">
-        </payment-unit-component>
-        <div v-if="showReserveWarning(unit)" class="card-warning" v-i18n="$t(unit)">
-        (Some ${0} are unavailable here in reserve for the project card.)
-        </div>
+    <template v-if="card.additionalProjectCosts">
+      <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
+        v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
+      >
+        Playing ${0} consumes ${1} ${2} from ${3}
+      </div>
+      <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
+        v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
+        Playing ${0} consumes ${1} ${2} from ${3}
+      </div>
+      <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
+        Playing ${0} will cost ${1} M€ more because ${2} are in power
       </div>
     </template>
+    <warnings-component :warnings="card.warnings"></warnings-component>
 
-    <div v-if="hasWarning()" class="tm-warning">
-      <label class="label label-error">{{ $t(warning) }}</label>
-    </div>
+    <section v-trim-whitespace>
+      <h3 class="payments_title" v-i18n>How to pay?</h3>
 
-    <div v-if="showsave === true" class="payments_save">
-      <AppButton size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" data-test="save"/>
-    </div>
-  </section>
+      <template v-for="unit of SPENDABLE_RESOURCES" :key="unit">
+        <div>
+          <payment-unit-component
+            v-model.number="payment[unit]"
+            v-if="canUse(unit) === true"
+            :unit="unit"
+            :description="descriptions[unit]"
+            @plus="addValue(unit)"
+            @minus="reduceValue(unit)"
+            @max="setMaxValue(unit)">
+          </payment-unit-component>
+          <div v-if="showReserveWarning(unit)" class="card-warning" v-i18n="$t(unit)">
+          (Some ${0} are unavailable here in reserve for the project card.)
+          </div>
+        </div>
+      </template>
+
+      <div v-if="hasWarning()" class="tm-warning">
+        <label class="label label-error">{{ $t(warning) }}</label>
+      </div>
+
+      <div v-if="showsave === true" class="payments_save">
+        <AppButton size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" data-test="save"/>
+      </div>
+    </section>
+  </template>
 </div>
 </template>
 
@@ -102,6 +159,14 @@ export default defineComponent({
     ...PaymentWidgetMixin.computed,
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
+    },
+    instantPlay(): boolean {
+      return getPreferences().instant_play;
+    },
+    hasAlternativePayment(): boolean {
+      return (SPENDABLE_RESOURCES as ReadonlyArray<keyof Payment>)
+        .filter((unit) => unit !== 'megaCredits')
+        .some((unit) => this.canUse(unit));
     },
     SPENDABLE_RESOURCES(): ReadonlyArray<keyof Payment> {
       return [
@@ -334,6 +399,13 @@ export default defineComponent({
     },
     canUseLunaTradeFederationTitanium(): boolean {
       return this.playerinput.paymentOptions.lunaTradeFederationTitanium === true;
+    },
+    selectCard(card: CardModel) {
+      this.cardName = card.name;
+      this.cardChanged();
+      if (!this.hasAlternativePayment) {
+        this.saveData();
+      }
     },
     cardChanged() {
       this.card = this.getCard();
