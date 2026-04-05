@@ -284,12 +284,13 @@ export default defineComponent({
         return false;
       }
       if (this.hasPrelude) {
-        if (this.selectedPreludes.length < 2) {
-          this.warning = 'Select 2 preludes';
+        const pickedPreludes = this.playerView.game.gameOptions.pickedPreludes;
+        if (this.selectedPreludes.length < pickedPreludes) {
+          this.warning = `Select ${pickedPreludes} preludes`;
           return false;
         }
-        if (this.selectedPreludes.length > 2) {
-          this.warning = 'You selected too many preludes';
+        if (this.selectedPreludes.length > pickedPreludes) {
+          this.warning = `You selected too many preludes`;
           return false;
         }
       }
@@ -349,10 +350,12 @@ export default defineComponent({
     },
     preludeCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_PRELUDE_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.max = option.cards.length;
-      }
-      return option;
+      const pickedPreludes = this.playerView.game.gameOptions.pickedPreludes;
+      return {
+        ...option,
+        title: `Select ${pickedPreludes} Prelude cards`,
+        max: getPreferences().experimental_ui ? option.cards.length : option.max,
+      };
     },
     ceoCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_CEO_TITLE);

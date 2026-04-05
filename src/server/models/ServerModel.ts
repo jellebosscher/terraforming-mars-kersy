@@ -449,6 +449,7 @@ export class Server {
       twoCorpsVariant: options.twoCorpsVariant,
       doubleDownVariant: options.doubleDownVariant,
       undoOption: options.undoOption,
+      pickedPreludes: options.pickedPreludes,
     };
   }
 
