@@ -32,4 +32,5 @@ export type GameOptionsModel = {
   twoCorpsVariant: boolean,
   doubleDownVariant: boolean,
   undoOption: boolean,
+  pickedPreludes: number,
 }
