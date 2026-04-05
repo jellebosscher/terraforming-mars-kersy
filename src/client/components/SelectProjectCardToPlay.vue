@@ -5,7 +5,8 @@
 
   <!-- Instant play mode: click card to play (or expand payment panel if alternatives exist) -->
   <template v-if="instantPlay">
-    <div v-for="availableCard in cards" class="payments_cards" :key="availableCard.name" style="cursor:pointer">
+    <div style="display:flex; flex-wrap:wrap; align-items:flex-start;">
+    <div v-for="availableCard in cards" class="payments_cards" :key="availableCard.name" style="cursor:pointer; display:inline-block; vertical-align:top;">
       <Card class="cardbox" :card="availableCard" @click="selectCard(availableCard)" />
 
       <template v-if="cardName === availableCard.name && hasAlternativePayment">
@@ -54,6 +55,7 @@
           </div>
         </section>
       </template>
+    </div>
     </div>
   </template>
 
