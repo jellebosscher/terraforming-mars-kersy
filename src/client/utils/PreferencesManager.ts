@@ -20,6 +20,7 @@ export type Preferences = {
   symbol_overlay: boolean,
   animated_title: boolean,
   experimental_ui: boolean,
+  instant_play: boolean,
   lang: string,
 }
 
@@ -50,6 +51,7 @@ const defaults: Preferences = {
   animated_title: true,
 
   experimental_ui: false,
+  instant_play: false,
   debug_view: false,
 };
 

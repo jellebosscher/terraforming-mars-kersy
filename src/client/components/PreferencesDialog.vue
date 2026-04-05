@@ -56,6 +56,12 @@
       </div>
       <div class="preferences_panel_item">
         <label class="form-switch">
+          <input type="checkbox" v-on:change="updatePreferences" v-model="prefs.instant_play" data-test="instant_play">
+          <i class="form-icon"></i> <span v-i18n>Instant card play</span>
+        </label>
+      </div>
+      <div class="preferences_panel_item">
+        <label class="form-switch">
           <input type="checkbox" v-on:change="updatePreferences" v-model="prefs.learner_mode" data-test="learner_mode">
           <i class="form-icon"></i>
           <span v-i18n>Learner Mode (req. refresh)</span>
